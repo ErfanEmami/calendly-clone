@@ -29,7 +29,8 @@ import {
 import { Button } from "../ui/button"
 import { Switch } from "../ui/switch"
 import Link from "next/link"
-import { createEvent, updateEvent } from "@/server/actions/events"
+import { createEvent, deleteEvent, updateEvent } from "@/server/actions/events"
+import { useTransition } from "react"
 
 export function EventForm ({
   event,
@@ -42,6 +43,7 @@ export function EventForm ({
     isActive: boolean
   }
 }) {
+  const [isDeletePending, startDeleteTransition] = useTransition()
   const form = useForm<z.infer<typeof eventFormSchema>>({
     resolver: zodResolver(eventFormSchema),
     defaultValues: event || {
@@ -139,7 +141,7 @@ export function EventForm ({
           )}
         />
         <div className="flex gap-2 justify-end">
-          {/* {event && (
+          {event && (
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button
@@ -179,7 +181,7 @@ export function EventForm ({
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
-          )} */}
+          )}
 
           <Button
             disabled={form.formState.isSubmitting}
