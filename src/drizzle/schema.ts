@@ -31,14 +31,19 @@ export const EventTable = pgTable(
   })
 )
 
-export const ScheduleTable = pgTable("schedules", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  timezone: text("timezone").notNull(),
-  clerkUserId: text("clerkUserId").notNull().unique(),
-  createdAt,
-  updatedAt,
-})
+export const ScheduleTable = pgTable(
+  "schedules", 
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    timezone: text("timezone").notNull(),
+    clerkUserId: text("clerkUserId").notNull().unique(),
+    createdAt,
+    updatedAt,
+  }
+)
 
+// helper to the ORM in describing the relationship
+// each schedule can have many availabilities (1 schedule to many availabilities)
 export const scheduleRelations = relations(ScheduleTable, ({ many }) => ({
   availabilities: many(ScheduleAvailabilityTable),
 }))
@@ -51,7 +56,7 @@ export const ScheduleAvailabilityTable = pgTable(
     id: uuid("id").primaryKey().defaultRandom(),
     scheduleId: uuid("scheduleId")
       .notNull()
-      .references(() => ScheduleTable.id, { onDelete: "cascade" }),
+      .references(() => ScheduleTable.id, { onDelete: "cascade" }), // defines foreign key (scheduleId maps to id in ScheduleTable)
     startTime: text("startTime").notNull(),
     endTime: text("endTime").notNull(),
     dayOfWeek: scheduleDayOfWeekEnum("dayOfWeek").notNull(),

@@ -184,7 +184,7 @@ export function EventForm ({
           )}
 
           <Button
-            disabled={form.formState.isSubmitting}
+            disabled={isDeletePending || form.formState.isSubmitting}
             type="button"
             asChild
             variant="outline"
@@ -192,7 +192,7 @@ export function EventForm ({
             <Link href="/events">Cancel</Link>
           </Button>
           <Button
-            disabled={form.formState.isSubmitting}
+            disabled={isDeletePending || form.formState.isSubmitting}
             type="submit"
           >
             Save
